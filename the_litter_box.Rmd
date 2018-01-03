@@ -1,0 +1,50 @@
+---
+title: "Banks Will Fail, Cats Will Prevail"
+author: "Brendan Routh"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+###Inspiration: 
+
+A running joke amongst my friends at school is to try to convince peers that the banks are going to fail within two years and as a result, the cat population will increase. Here I knowingly manipulated the numbers and certain functions in order produce graphs that evince a relationship between the success of the banks and the population of cats. I would short all bank stocks and buy into cats if I were you. 
+
+###Description:
+
+This mini project is an example of what not to do as a statistician and why readers should challenge statistics in everyday life. There are numerous errors throughout the analysis of the data. 
+With that being said, the data collected is legitmate. The cat data was taken from the APPA National Pet Owners Survey and the bank data is the SPDR S&P Bank ETF data taken from Barron's. The SPDR S&P Bank ETF was selected because it indicates the general success of American banks. 
+The most prominent error would be if someone viewed the graphs and concluded that bank failure causes Americans to buy cats. Correlation does not prove causation. It just so happens that there seems to be a moderate correlation in this extremely small data set by looking at the graphs. The graphs were manipulated, however, to include the geom_smooth function to illustrate a strong correlation. The geom_smooth function includes the line of best fit, which in essence is like a vague summary, to show the general direction of the data. The geom_line function connects the observations in order of the x axis variable in order to show the actual shape of the data. If the geom_line function had been used, the graphs would not have shown an obvious correlation between cat population and ETF price, so I chose to use the geom_smooth function to facilitate a strong relationship. 
+The only reason such a manipulation worked is because the dataset is so limited. There are only six observations. No statistical significance is able to be determined with such a limited sample size. Although the graphs show an inverse relationship between cat population and bank success, I would not trust this analysis.  
+
+
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+library(readr)
+library(tidyverse)
+```
+
+
+
+This code chunk reads in the data and joins the two datasets. 
+```{r  message=FALSE, warning=FALSE}
+cats <- read.csv("data/cat_population.csv")
+banks <- read_csv("data/banks_etf.csv")
+
+overview <- inner_join(cats,banks, by = c("year"))
+```
+
+
+
+Here the data is plotted on two separate plots. 
+```{r message=FALSE, warning=FALSE}
+overview %>% ggplot(aes(x = year, y = number_of_cats)) + geom_smooth(method = "lm", se = FALSE) + scale_x_continuous(breaks=c(2007,2009,2011,2013,2015,2017)) + ggtitle("Cat Population in the United States") + xlab("Year") + ylab("Number of Cats(millions)")
+overview %>% ggplot(aes(x = year, y = price)) + geom_smooth(method = "lm", se = FALSE) + scale_x_continuous(breaks=c(2007,2009,2011,2013,2015,2017)) + ggtitle("Stock Price of SPDR S&P Bank ETF") + xlab("Year") + ylab("Stock Price")
+```
+
+
+###Conclusion: 
+
+Don't trust all graphs and statistics that you see everyday. 
+
+
